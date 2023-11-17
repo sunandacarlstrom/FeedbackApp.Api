@@ -1,4 +1,8 @@
+using FeedbackApp.Api.Models;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 
 // Add services to the container.
 
