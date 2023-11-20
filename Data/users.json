@@ -1,0 +1,10 @@
+[
+    {
+        "_id": {
+            "$oid": "655baf7bd48513d5f9ddaf84"
+        },
+        "first_name": "Sunanda",
+        "last_name": "Carlström",
+        "email_address": "sunanda.carlstrom@knowit.se"
+    }
+]

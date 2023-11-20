@@ -18,14 +18,14 @@ public class ListingsAndReviewsController : ControllerBase
     [HttpGet]
     public async Task<List<Company>> Get()
     {
-        return await _mongoDBService.GetAsync();
+        return await _mongoDBService.GetCompany();
 
     }
 
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] Company listingsAndReviews)
     {
-        await _mongoDBService.CreateAsync(listingsAndReviews);
+        await _mongoDBService.CreateCompany(listingsAndReviews);
 
         return CreatedAtAction(nameof(Get), new { id = listingsAndReviews.Id }, listingsAndReviews);
 
@@ -34,7 +34,7 @@ public class ListingsAndReviewsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> AddToListingsAndReviews(string id, [FromBody] string listingsAndReviewsId)
     {
-        await _mongoDBService.AddToListingsAndReviewsAsync(id, listingsAndReviewsId);
+        await _mongoDBService.UpdateCompany(id, listingsAndReviewsId);
 
         return NoContent();
 
@@ -43,7 +43,7 @@ public class ListingsAndReviewsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
-        await _mongoDBService.DeleteAsync(id);
+        await _mongoDBService.DeleteCompany(id);
         return NoContent();
     }
 }

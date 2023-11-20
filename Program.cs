@@ -3,8 +3,6 @@ using FeedbackApp.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddUserSecrets<MongoDBSettings>(); 
-
 // ...bind our settings as a MongoDBService 
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB")); 
 builder.Services.AddSingleton<MongoDBService>();  

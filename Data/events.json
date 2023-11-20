@@ -1,0 +1,54 @@
+[
+    {
+        "name": "Knowit-Mässan",
+        "company_name": "Knowit",
+        "company_id": {
+            "$oid": "655baf9bd48513d5f9ddaf86"
+        },
+        "quizzes": [
+            {
+                "questions": [
+                    {
+                        "question": "Vad tycker du om detta eventet?",
+                        "options": [],
+                        "answers": [
+                            {
+                                "answer": ["Jättebra :D"],
+                                "user_name": "Sunanda",
+                                "user_id": {
+                                    "$oid": "655baf7bd48513d5f9ddaf84"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "title": "AI, är det najs eller?",
+                        "options": ["1", "2", "3"],
+                        "answers": [
+                            {
+                                "answer": ["1"],
+                                "user_name": "Sunanda",
+                                "user_id": {
+                                    "$oid": "655baf7bd48513d5f9ddaf84"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Vad vill du göra som projektarbete?\nUtveckla integrerade system\n",
+                        "options": ["Utveckla integrerade system", "Utveckla webbapplikationer", "Utveckla CMS"],
+                        "answers": [
+                            {
+                                "answer": ["Utveckla integrerade system", "Utveckla CMS"],
+                                "user_name": "Sunanda",
+                                "user_id": {
+                                    "$oid": "655baf7bd48513d5f9ddaf84"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
