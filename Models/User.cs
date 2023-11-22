@@ -9,15 +9,19 @@ public class User
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
 
-    [BsonElement("first_name")]
-    [JsonPropertyName("first_name")]
-    public string? FirstName { get; set; }
+    [BsonElement("company")]
+    [JsonPropertyName("company")]
+    public string? CompanyName { get; set; }
+
+    [BsonElement("business_area")]
+    [JsonPropertyName("business_area")]
+    public string? BusinessArea { get; set; }
     
-    [BsonElement("last_name")]
-    [JsonPropertyName("last_name")]
-    public string? LastName { get; set; }
+    [BsonElement("username")]
+    [JsonPropertyName("username")]
+    public string? UserName { get; set; }
     
-    [BsonElement("email_address")]
-    [JsonPropertyName("email_address")]
-    public string? EmailAddress { get; set; }
+    [BsonElement("password")]
+    [JsonPropertyName("password")]
+    public string? Password { get; set; }
 }

@@ -12,16 +12,20 @@ public class Event
 
     [BsonElement("name")]
     [JsonPropertyName("name")]
-    public string? Name { get; set; }
+    public string? EventName { get; set; }
 
-    [BsonElement("company_name")]
-    [JsonPropertyName("company_name")]
+    [BsonElement("company")]
+    [JsonPropertyName("company")]
     public string? CompanyName { get; set; }
 
-    [BsonElement("company_id")]
-    [JsonPropertyName("company_id")]
+    [BsonElement("business_area")]
+    [JsonPropertyName("business_area")]
+    public string? BusinessArea { get; set; }
+
+    [BsonElement("user_id")]
+    [JsonPropertyName("user_id")]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string? CompanyId { get; set; }
+    public string? UserId { get; set; }
 
     [BsonElement("quizzes")]
     [JsonPropertyName("quizzes")]

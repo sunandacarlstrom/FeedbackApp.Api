@@ -1,7 +1,52 @@
 [
     {
         "name": "Knowit-Mässan",
-        "company_name": "Knowit",
+        "company": "Knowit Jönköping AB",
+        "business_area": "Experience",
+        "user_id": {
+            "$oid": "655baf9bd48513d5f9ddaf86"
+        },
+        "quizzes": [
+            {
+                "questions": [
+                    {
+                        "title": "Vad tycker du om AI",
+                        "type": "free",
+                        "options": [],
+                        "answers": [
+                            {
+                                "result": ["Spännande!"]
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Vad tycker du om detta event?",
+                        "type": "single",
+                        "options": ["1", "2", "3", "4", "5"],
+                        "answers": [
+                            {
+                                "result": ["1"]
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Vad vill du utveckla dig inom?",
+                        "type": "multiple",
+                        "options": ["AI", "Webb content", "UX/UI"],
+                        "answers": [
+                            {
+                                "result": ["AI", "UX/UI"]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Kärriärum",
+        "company": "Knowit Jönköping AB",
+        "business_area": "Experience",
         "company_id": {
             "$oid": "655baf9bd48513d5f9ddaf86"
         },
@@ -9,41 +54,76 @@
             {
                 "questions": [
                     {
-                        "question": "Vad tycker du om detta eventet?",
+                        "title": "Ge gärna förslag på hur Knowit kan marknadsföra sig",
+                        "type": "free",
                         "options": [],
                         "answers": [
                             {
-                                "answer": ["Jättebra :D"],
-                                "user_name": "Sunanda",
-                                "user_id": {
-                                    "$oid": "655baf7bd48513d5f9ddaf84"
-                                }
+                                "result": ["Anordna fler evenemang för studenter"]
                             }
                         ]
                     },
                     {
-                        "title": "AI, är det najs eller?",
-                        "options": ["1", "2", "3"],
+                        "title": "Hur bra tycker du att Knowit är på att marknadsföra sig?",
+                        "type": "single",
+                        "options": ["1", "2", "3", "4", "5"],
                         "answers": [
                             {
-                                "answer": ["1"],
-                                "user_name": "Sunanda",
-                                "user_id": {
-                                    "$oid": "655baf7bd48513d5f9ddaf84"
-                                }
+                                "result": ["3"]
                             }
                         ]
                     },
                     {
-                        "title": "Vad vill du göra som projektarbete?\nUtveckla integrerade system\n",
+                        "title": "Vad vill du göra som examensarbete?",
+                        "type": "multiple",
                         "options": ["Utveckla integrerade system", "Utveckla webbapplikationer", "Utveckla CMS"],
                         "answers": [
                             {
-                                "answer": ["Utveckla integrerade system", "Utveckla CMS"],
-                                "user_name": "Sunanda",
-                                "user_id": {
-                                    "$oid": "655baf7bd48513d5f9ddaf84"
-                                }
+                                "result": ["Utveckla integrerade system", "Utveckla CMS"]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Opticon",
+        "company": "Knowit Jönköping AB", 
+        "business_area": "Connectivity",
+        "company_id": {
+            "$oid": "655baf9bd48513d5f9ddaf87"
+        },
+        "quizzes": [
+            {
+                "questions": [
+                    {
+                        "title": "Beskriv kort vad tycker du om Optimizely och deras produktsuite?",
+                        "type": "free",
+                        "options": [],
+                        "answers": [
+                            {
+                                "result": ["Jätte bra!"]
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Tycker du att vi lyckades ge dig råd gällande hantering av AI-verktyg?",
+                        "type": "single",
+                        "options": ["1", "2", "3", "4", "5"],
+                        "answers": [
+                            {
+                                "result": ["1"]
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Vad tycker du att Opticon ska ta upp nästa år?",
+                        "type": "multiple",
+                        "options": ["Olika CMS", "Senaste nytt om AI", "Databashantering"],
+                        "answers": [
+                            {
+                                "result": ["Databashantering"]
                             }
                         ]
                     }

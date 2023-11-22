@@ -9,7 +9,7 @@ builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("Mo
 builder.Services.AddSingleton<FeedbackContext>();
 
 // Add services to the container.
-builder.Services.AddSingleton<CompanyService>(); 
+builder.Services.AddSingleton<UserService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
