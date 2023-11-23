@@ -1,3 +1,5 @@
+using System.Security;
+using FeedbackApp.Api.Dto;
 using FeedbackApp.Api.Models;
 using FeedbackApp.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -6,10 +8,10 @@ namespace FeedbackApp.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UserController : ControllerBase
+public class UsersController : ControllerBase
 {
     private readonly UserService _userService;
-    public UserController(UserService userService)
+    public UsersController(UserService userService)
     {
         _userService = userService;
     }
@@ -18,7 +20,6 @@ public class UserController : ControllerBase
     public async Task<List<User>> GetAllUsers()
     {
         return await _userService.GetUsers();
-
     }
 
     [HttpPost]
@@ -31,12 +32,18 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser(string id, [FromBody] string userId)
+    public async Task<IActionResult> UpdateUser(string id, [FromBody] User user)
     {
-        await _userService.UpdateUser(id, userId);
+        await _userService.UpdateUser(id, user);
 
         return NoContent();
+    }
 
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> UpdateUserPermission(string id, [FromBody] UserPermissionDto model)
+    {
+        await _userService.UpdateUserPermission(id, model);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]

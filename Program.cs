@@ -10,6 +10,8 @@ builder.Services.AddSingleton<FeedbackAppContext>();
 
 // Add services to the container.
 builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<CompanyService>();
+builder.Services.AddSingleton<EventService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

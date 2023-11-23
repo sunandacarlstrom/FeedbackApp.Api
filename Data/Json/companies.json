@@ -27,8 +27,8 @@
         "_id": {
             "$oid": "655f2b39135d0949439962bd"
         },
-        "name": "Consid AB",
-        "business_area": "Jönköping",
-        "full_name": "Consid Jönköping"
+        "name": "Yamaha Sverige AB",
+        "business_area": "Göteborg",
+        "full_name": "Yamaha Göteborg"
     }
 ]
