@@ -1,0 +1,34 @@
+[
+    {
+        "_id": {
+            "$oid": "655f2b39135d0949439962bf"
+        },
+        "name": "Knowit Jönköping AB",
+        "business_area": "Experience",
+        "full_name": "Knowit Experience Jönköping"
+    },
+    {
+        "_id": {
+            "$oid": "655f2b39135d0949439962be"
+        },
+        "name": "Knowit Jönköping AB",
+        "business_area": "Connectivity",
+        "full_name": "Knowit Connectivity Jönköping"
+    },
+    {
+        "_id": {
+            "$oid": "655f2b39135d0949439962bc"
+        },
+        "name": "Knowit Jönköping AB",
+        "business_area": "Swedspot",
+        "full_name": "Knowit Swedspot Jönköping"
+    },
+    {
+        "_id": {
+            "$oid": "655f2b39135d0949439962bd"
+        },
+        "name": "Consid AB",
+        "business_area": "Jönköping",
+        "full_name": "Consid Jönköping"
+    }
+]

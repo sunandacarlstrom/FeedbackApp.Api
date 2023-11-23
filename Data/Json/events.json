@@ -1,10 +1,12 @@
 [
     {
         "name": "Knowit-Mässan",
-        "company": "Knowit Jönköping AB",
-        "business_area": "Experience",
-        "user_id": {
-            "$oid": "655baf9bd48513d5f9ddaf86"
+        "start_date": { "$date": "2024-08-12T13:30" },
+        "end_date": { "$date": "2024-08-12T18:00" },
+        "location": "Husqvarna Garden, Huskvarna",
+        "company_full_name": "Knowit Experience Jönköping",
+        "company_id": {
+            "$oid": "655f2b39135d0949439962bf"
         },
         "quizzes": [
             {
@@ -45,10 +47,12 @@
     },
     {
         "name": "Kärriärum",
-        "company": "Knowit Jönköping AB",
-        "business_area": "Experience",
+        "start_date": { "$date": "2024-11-01T13:00" },
+        "end_date": { "$date": "2024-12-01T16:00" },
+        "location": "Jönköping University",
+        "company_full_name": "Knowit Experience Jönköping",
         "company_id": {
-            "$oid": "655baf9bd48513d5f9ddaf86"
+            "$oid": "655f2b39135d0949439962bf"
         },
         "quizzes": [
             {
@@ -89,10 +93,12 @@
     },
     {
         "name": "Opticon",
-        "company": "Knowit Jönköping AB", 
-        "business_area": "Connectivity",
+        "start_date": { "$date": "2024-03-12T10:00" },
+        "end_date": { "$date": "2024-03-12T17:00" },
+        "location": "Stora hotellet i Jönköping",
+        "company_full_name": "Knowit Connectivity Jönköping",
         "company_id": {
-            "$oid": "655baf9bd48513d5f9ddaf87"
+            "$oid": "655f2b39135d0949439962be"
         },
         "quizzes": [
             {

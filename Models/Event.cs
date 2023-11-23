@@ -12,20 +12,28 @@ public class Event
 
     [BsonElement("name")]
     [JsonPropertyName("name")]
-    public string? EventName { get; set; }
+    public string? Name { get; set; }
 
-    [BsonElement("company")]
-    [JsonPropertyName("company")]
+    [BsonElement("start_date")]
+    [JsonPropertyName("start_date")]
+    public DateTime StartDate { get; set; }
+
+    [BsonElement("end_date")]
+    [JsonPropertyName("end_date")]
+    public DateTime EndDate { get; set; }
+
+    [BsonElement("location")]
+    [JsonPropertyName("location")]
+    public DateTime Location { get; set; }
+
+    [BsonElement("company_full_name")]
+    [JsonPropertyName("company_full_name")]
     public string? CompanyName { get; set; }
 
-    [BsonElement("business_area")]
-    [JsonPropertyName("business_area")]
-    public string? BusinessArea { get; set; }
-
-    [BsonElement("user_id")]
-    [JsonPropertyName("user_id")]
+    [BsonElement("company_id")]
+    [JsonPropertyName("company_id")]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string? UserId { get; set; }
+    public string? CompanyId { get; set; }
 
     [BsonElement("quizzes")]
     [JsonPropertyName("quizzes")]

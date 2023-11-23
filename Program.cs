@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Connect to MongoDB
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
-builder.Services.AddSingleton<FeedbackContext>();
+builder.Services.AddSingleton<FeedbackAppContext>();
 
 // Add services to the container.
 builder.Services.AddSingleton<UserService>();

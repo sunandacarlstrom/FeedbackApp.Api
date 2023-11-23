@@ -4,6 +4,6 @@ namespace FeedbackApp.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class EventController : ControllerBase
+public class CompanyController : ControllerBase
 {
 }
