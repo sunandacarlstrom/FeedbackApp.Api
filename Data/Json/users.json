@@ -1,20 +1,36 @@
 [
     {
-        "_id": {
-            "$oid": "655baf9bd48513d5f9ddaf86"
-        },
-        "company": "Knowit Jönköping AB", 
-        "business_area": "Experience",
-        "username": "knowitexpjkpg", 
-        "password": "know!T123"
+        "username": "sunandacarlstrom",
+        "password": "asdf1234",
+        "permission": "superuser",
+        "company_permissions": []
     },
     {
-        "_id": {
-            "$oid": "655baf9bd48513d5f9ddaf87"
-        },
-        "company": "Knowit Jönköping AB", 
-        "business_area": "Connectivity",
-        "username": "knowitconnjkpg", 
-        "password": "know!Tconn123"
+        "username": "fredrikhansson",
+        "password": "know!T123",
+        "permission": "user",
+        "company_permissions": [
+            {
+                "company_id": {
+                    "$oid": "655f2b39135d0949439962bf"
+                },
+                "company_full_name": "Knowit Experience Jönköping",
+                "permission": "admin"
+            },
+            {
+                "company_id": {
+                    "$oid": "655f2b39135d0949439962be"
+                },
+                "company_full_name": "Knowit Connectivity Jönköping",
+                "permission": "edit"
+            },
+            {
+                "company_id": {
+                    "$oid": "655f2b39135d0949439962bc"
+                },
+                "company_full_name": "Knowit Swedspot Jönköping",
+                "permission": "read"
+            }
+        ]
     }
 ]

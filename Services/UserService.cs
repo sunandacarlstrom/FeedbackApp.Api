@@ -6,8 +6,8 @@ using MongoDB.Driver;
 namespace FeedbackApp.Api.Services;
 public class UserService
 {
-    private readonly FeedbackContext _context;
-    public UserService(FeedbackContext context)
+    private readonly FeedbackAppContext _context;
+    public UserService(FeedbackAppContext context)
     {
         _context = context;
     }
