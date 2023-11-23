@@ -6,10 +6,6 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace FeedbackApp.Api.Models;
 public class CompanyPermissions
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string? Id { get; set; }
-
     [BsonElement("company_id")]
     [JsonPropertyName("company_id")]
     [BsonRepresentation(BsonType.ObjectId)]
