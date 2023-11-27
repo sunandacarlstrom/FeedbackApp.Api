@@ -24,7 +24,7 @@ public class Event
 
     [BsonElement("location")]
     [JsonPropertyName("location")]
-    public DateTime Location { get; set; }
+    public string? Location { get; set; }
 
     [BsonElement("company_full_name")]
     [JsonPropertyName("company_full_name")]

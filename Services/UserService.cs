@@ -13,6 +13,7 @@ public class UserService
         _context = context;
     }
 
+    // TODO: Ändra alla endpoints i UserService + UserController
     public async Task<List<User>> GetUsers()
     {
         return await _context.Users.Find(new BsonDocument()).ToListAsync();
@@ -31,7 +32,7 @@ public class UserService
         .Set(u => u.UserName, user.UserName)
         .Set(u => u.Password, user.Password)
         .Set(u => u.Permission, user.Permission)
-        .Set(u => u.CompanyPermissions, user.CompanyPermissions); 
+        .Set(u => u.CompanyPermissions, user.CompanyPermissions);
 
         await _context.Users.UpdateOneAsync(filter, update);
         return;
@@ -39,11 +40,11 @@ public class UserService
 
     public async Task UpdateUserPermission(string id, UserPermissionDto model)
     {
-        FilterDefinition<User> filter = Builders<User>.Filter.Eq("Id", id); 
+        FilterDefinition<User> filter = Builders<User>.Filter.Eq("Id", id);
         UpdateDefinition<User> update = Builders<User>.Update.Set(u => u.Permission, model.Permission);
 
-        await _context.Users.UpdateOneAsync(filter, update); 
-        return; 
+        await _context.Users.UpdateOneAsync(filter, update);
+        return;
     }
 
     public async Task DeleteUser(string id)
