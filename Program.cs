@@ -13,6 +13,18 @@ builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<CompanyService>();
 builder.Services.AddSingleton<EventService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("NextJSPolicy", builder =>
+    {
+        builder
+        .WithOrigins("http://localhost:3000")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+    });
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -26,6 +38,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("NextJSPolicy"); 
 
 app.UseHttpsRedirection();
 
