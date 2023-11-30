@@ -11,37 +11,50 @@ public class EventService
         _context = context;
     }
 
-    // TODO: Lägg till fallback ifall det inte går att hämta önskad data
     public async Task<List<Event>> GetAllEvents()
     {
-        return await _context.Events
+        try
+        {
+            return await _context.Events
             .Find(_ => true)
             .ToListAsync();
-
-        // var filter = Builders<Event>
-        //     .Filter
-        //     .Eq("CompanyId", companyId);
-        // return await _context.Events.Find(filter).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Can't get any events in the collection due to {ex.Message}");
+            return new List<Event>();
+        }
     }
 
-    // TODO: Lägg till fallback ifall det inte går att hämta önskad data
     public async Task<List<Event>> GetCompanyEvents(string companyId)
     {
-        return await _context.Events
-            .Find(e => e.CompanyId == companyId)
-            .ToListAsync();
-
-        // var filter = Builders<Event>
-        //     .Filter
-        //     .Eq("CompanyId", companyId);
-        // return await _context.Events.Find(filter).ToListAsync();
+        try
+        {
+            return await _context.Events
+           .Find(e => e.CompanyId == companyId)
+           .ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Can't get the events of the company {companyId} due to {ex.Message}");
+            return new List<Event>();
+        }
     }
 
     public async Task<Event> GetEventById(string id)
     {
-        return await _context.Events
+        try
+        {
+            return await _context.Events
             .Find(e => e.Id == id)
             .FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Can't get the event with id: {id} due to {ex.Message}");
+            return new Event();
+        }
+
     }
 
     public async Task<bool> CreateEvent(Event companyEvent)
@@ -51,11 +64,32 @@ public class EventService
             await _context.Events.InsertOneAsync(companyEvent);
             return true;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine("Fel vid inmatning av nytt event " + e);
+            Console.WriteLine($"Can't create a new event due to {ex.Message}");
             return false;
         }
+    }
+
+    public async Task<UpdateResult> AddAnswer(string eventId, int quizIndex, int questionIndex, List<string> result)
+    {
+        var answers = new Answer
+        {
+            Result = result
+        };
+
+        var addAnswer = Builders<Event>.Update.Push(e => e.Quizzes[quizIndex].Questions[questionIndex].Answers, answers);
+
+        var updateResult = await _context.Events.UpdateOneAsync(e => e.Id == eventId, addAnswer);
+        return updateResult;
+    }
+
+    public async Task<UpdateResult> AddQuestion(string eventId, int quizIndex, Question questions)
+    {
+        var addQuestion = Builders<Event>.Update.Push(e => e.Quizzes[quizIndex].Questions, questions);
+
+        var updateResult = await _context.Events.UpdateOneAsync(e => e.Id == eventId, addQuestion);
+        return updateResult;
     }
 
     public async Task<ReplaceOneResult> UpdateEvent(string id, Event companyEvent)
@@ -63,34 +97,15 @@ public class EventService
         var result = await _context.Events
             .ReplaceOneAsync(e => e.Id == id, companyEvent);
         return result;
-
-        //     FilterDefinition<Event> filter = Builders<Event>.Filter.Eq("Id", id);
-        //     UpdateDefinition<Event> update = Builders<Event>.Update
-        //     .Set(ce => ce.Name, companyEvent.Name)
-        //     .Set(ce => ce.StartDate, companyEvent.StartDate)
-        //     .Set(ce => ce.EndDate, companyEvent.EndDate)
-        //     .Set(ce => ce.Location, companyEvent.Location);
-        //     .Set(ce => ce.CompanyName, companyEvent.CompanyName);
-
-        //     await _context.Events.UpdateOneAsync(filter, update);
-        //     return;
     }
 
     public async Task<DeleteResult> DeleteEvent(string id)
     {
         return await _context.Events.DeleteOneAsync(e => e.Id == id);
-
-        //     FilterDefinition<Event> filter = Builders<Event>.Filter.Eq("Id", id);
-        //     await _context.Events.DeleteOneAsync(filter);
-        //     return;
     }
 
     public async Task<DeleteResult> DeleteAllCompanyEvents(string companyId)
     {
         return await _context.Events.DeleteManyAsync(e => e.Id == companyId);
-
-        //     FilterDefinition<Event> filter = Builders<Event>.Filter.Eq("Id", id);
-        //     await _context.Events.DeleteOneAsync(filter);
-        //     return;
     }
 }

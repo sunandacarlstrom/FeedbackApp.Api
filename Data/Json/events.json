@@ -13,7 +13,7 @@
                 "questions": [
                     {
                         "title": "Vad tycker du om AI",
-                        "type": "free",
+                        "type": "text",
                         "options": [],
                         "answers": [
                             {
@@ -59,7 +59,7 @@
                 "questions": [
                     {
                         "title": "Ge gärna förslag på hur Knowit kan marknadsföra sig",
-                        "type": "free",
+                        "type": "text",
                         "options": [],
                         "answers": [
                             {
@@ -105,7 +105,7 @@
                 "questions": [
                     {
                         "title": "Beskriv kort vad tycker du om Optimizely och deras produktsuite?",
-                        "type": "free",
+                        "type": "text",
                         "options": [],
                         "answers": [
                             {
