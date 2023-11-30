@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -10,6 +11,7 @@ public class Company
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
 
+    [Required]
     [BsonElement("name")]
     [JsonPropertyName("name")]
     public string? Name { get; set; }
