@@ -33,16 +33,16 @@ public class EventsController : ControllerBase
         return await _eventService.GetEventById(id);
     }
 
-    [HttpGet("{eventId}/{quizIndex}/{questionIndex}")]
-    public async Task<Question> GetQuestionById(string eventId, int quizIndex, int questionIndex)
-    {
-        return await _eventService.GetQuestionById(eventId, quizIndex, questionIndex);
-    }
-
     [HttpGet("{eventId}/{quizIndex}")]
     public async Task<Quiz> GetQuizById(string eventId, int quizIndex)
     {
         return await _eventService.GetQuizById(eventId, quizIndex);
+    }
+
+    [HttpGet("{eventId}/{quizIndex}/{questionIndex}")]
+    public async Task<Question> GetQuestionById(string eventId, int quizIndex, int questionIndex)
+    {
+        return await _eventService.GetQuestionById(eventId, quizIndex, questionIndex);
     }
 
     [HttpPost]
@@ -50,7 +50,7 @@ public class EventsController : ControllerBase
     {
         if (!ModelState.IsValid) return BadRequest("Information is missing in order to create an event");
 
-        var result = await _eventService.CreateEvent(companyEvent);
+        var result = await _eventService.AddEvent(companyEvent);
 
         if (!result)
         {
@@ -60,16 +60,16 @@ public class EventsController : ControllerBase
         return CreatedAtAction(nameof(GetEventById), new { id = companyEvent.Id }, companyEvent);
     }
 
-    [HttpPost("{eventId}/{quizIndex}/{questionIndex}")]
-    public async Task<IActionResult> AddAnswer(string eventId, int quizIndex, int questionIndex, [FromBody] List<string> result)
+    [HttpPost("{eventId}/{quizIndex}")]
+    public async Task<IActionResult> AddQuestion(string eventId, int quizIndex, [FromBody] Question questions)
     {
         try
         {
-            var updateResult = await _eventService.AddAnswer(eventId, quizIndex, questionIndex, result);
+            var updateResult = await _eventService.AddQuestion(eventId, quizIndex, questions);
 
             if (updateResult.ModifiedCount > 0)
             {
-                return Ok("Answer is added successfully!");
+                return Ok("Question is added successfully!");
             }
             else
             {
@@ -83,16 +83,16 @@ public class EventsController : ControllerBase
         }
     }
 
-    [HttpPost("{eventId}/{quizIndex}")]
-    public async Task<IActionResult> AddQuestion(string eventId, int quizIndex, [FromBody] Question questions)
+    [HttpPost("{eventId}/{quizIndex}/{questionIndex}")]
+    public async Task<IActionResult> AddAnswer(string eventId, int quizIndex, int questionIndex, [FromBody] List<string> result)
     {
         try
         {
-            var updateResult = await _eventService.AddQuestion(eventId, quizIndex, questions);
+            var updateResult = await _eventService.AddAnswer(eventId, quizIndex, questionIndex, result);
 
             if (updateResult.ModifiedCount > 0)
             {
-                return Ok("Question is added successfully!");
+                return Ok("Answer is added successfully!");
             }
             else
             {
@@ -138,21 +138,6 @@ public class EventsController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteEvent(string id)
-    {
-        var result = await _eventService.DeleteEvent(id);
-
-        if (result.DeletedCount > 0)
-        {
-            return Ok("The event was successfully deleted");
-        }
-        else
-        {
-            return NotFound("The selected event isn't found");
-        }
-    }
-
     [HttpDelete("company/{companyId}")]
     public async Task<IActionResult> DeleteAllCompanyEvents(string companyId)
     {
@@ -165,6 +150,21 @@ public class EventsController : ControllerBase
         else
         {
             return NotFound($"There are no events found for company {companyId}");
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteEvent(string id)
+    {
+        var result = await _eventService.DeleteEvent(id);
+
+        if (result.DeletedCount > 0)
+        {
+            return Ok("The event was successfully deleted");
+        }
+        else
+        {
+            return NotFound("The selected event isn't found");
         }
     }
 
