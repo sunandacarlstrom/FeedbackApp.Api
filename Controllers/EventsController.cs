@@ -33,6 +33,18 @@ public class EventsController : ControllerBase
         return await _eventService.GetEventById(id);
     }
 
+    [HttpGet("{eventId}/{quizIndex}/{questionIndex}")]
+    public async Task<Question> GetQuestionById(string eventId, int quizIndex, int questionIndex)
+    {
+        return await _eventService.GetQuestionById(eventId, quizIndex, questionIndex);
+    }
+
+    [HttpGet("{eventId}/{quizIndex}")]
+    public async Task<Quiz> GetQuizById(string eventId, int quizIndex)
+    {
+        return await _eventService.GetQuizById(eventId, quizIndex);
+    }
+
     [HttpPost]
     public async Task<IActionResult> AddEvent([FromBody] Event companyEvent)
     {
@@ -111,6 +123,21 @@ public class EventsController : ControllerBase
         }
     }
 
+    [HttpPatch("{eventId}/{quizIndex}/{questionIndex}")]
+    public async Task<IActionResult> EditQuestion(string eventId, int quizIndex, int questionIndex, [FromBody] Question updatedQuestion)
+    {
+        var result = await _eventService.EditQuestion(eventId, quizIndex, questionIndex, updatedQuestion);
+
+        if (result.ModifiedCount > 0)
+        {
+            return Ok("Question updated successfully");
+        }
+        else
+        {
+            return NotFound("Can't edit the question. Try again!");
+        }
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEvent(string id)
     {
@@ -138,6 +165,21 @@ public class EventsController : ControllerBase
         else
         {
             return NotFound($"There are no events found for company {companyId}");
+        }
+    }
+
+    [HttpDelete("{eventId}/{quizIndex}/{questionIndex}")]
+    public async Task<IActionResult> DeleteQuestion(string eventId, int quizIndex, int questionIndex)
+    {
+        var result = await _eventService.DeleteQuestion(eventId, quizIndex, questionIndex);
+
+        if (result.ModifiedCount > 0)
+        {
+            return Ok("The selected question was successfully deleted");
+        }
+        else
+        {
+            return NotFound("The selected question isn't found");
         }
     }
 }

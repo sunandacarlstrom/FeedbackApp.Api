@@ -1,5 +1,6 @@
 using FeedbackApp.Api.Data;
 using FeedbackApp.Api.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace FeedbackApp.Api.Services;
@@ -99,6 +100,47 @@ public class EventService
         return result;
     }
 
+    public async Task<UpdateResult> EditQuestion(string eventId, int quizIndex, int questionIndex, Question updatedQuestion)
+    {
+        var filter = Builders<Event>.Filter.Eq(e => e.Id, eventId);
+
+        var update = Builders<Event>.Update
+            .Set(e => e.Quizzes[quizIndex].Questions[questionIndex].Title, updatedQuestion.Title)
+            .Set(e => e.Quizzes[quizIndex].Questions[questionIndex].Type, updatedQuestion.Type)
+            .Set(e => e.Quizzes[quizIndex].Questions[questionIndex].Options, updatedQuestion.Options)
+            .Set(e => e.Quizzes[quizIndex].Questions[questionIndex].Answers, updatedQuestion.Answers);
+
+        var result = await _context.Events.UpdateOneAsync(filter, update);
+        return result;
+    }
+
+    public async Task<Question> GetQuestionById(string eventId, int quizIndex, int questionIndex)
+    {
+        var companyEvent = await GetEventById(eventId);
+        var selectedQuestion = companyEvent.Quizzes[quizIndex].Questions[questionIndex];
+        return selectedQuestion; 
+    }
+
+        public async Task<Quiz> GetQuizById(string eventId, int quizIndex)
+    {
+        var companyEvent = await GetEventById(eventId);
+        var selectedQuiz = companyEvent.Quizzes[quizIndex];
+        return selectedQuiz; 
+    }
+
+    public async Task<UpdateResult> DeleteQuestion(string eventId, int quizIndex, int questionIndex)
+    {
+        var questionToRemove = await GetQuestionById(eventId, quizIndex, questionIndex);
+
+        var filter = Builders<Event>.Filter
+            .Where(e => e.Id == eventId);
+
+        var update = Builders<Event>.Update
+            .Pull(e => e.Quizzes[quizIndex].Questions, questionToRemove);
+        
+        return await _context.Events.UpdateOneAsync(filter, update);
+    }
+ 
     public async Task<DeleteResult> DeleteEvent(string id)
     {
         return await _context.Events.DeleteOneAsync(e => e.Id == id);
