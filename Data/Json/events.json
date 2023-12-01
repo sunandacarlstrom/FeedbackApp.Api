@@ -8,8 +8,44 @@
         "company_id": {
             "$oid": "655f2b39135d0949439962bf"
         },
-        "quizzes": [
+        "quizzes": [ 
             {
+                "name": "Feedback", 
+                "questions": [
+                    {
+                        "title": "Vad tycker du om AI",
+                        "type": "text",
+                        "options": [],
+                        "answers": [
+                            {
+                                "result": ["Spännande!"]
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Vad tycker du om detta event?",
+                        "type": "single",
+                        "options": ["1", "2", "3", "4", "5"],
+                        "answers": [
+                            {
+                                "result": ["1"]
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Vad vill du utveckla dig inom?",
+                        "type": "multiple",
+                        "options": ["AI", "Webb content", "UX/UI"],
+                        "answers": [
+                            {
+                                "result": ["AI", "UX/UI"]
+                            }
+                        ]
+                    }
+                ]
+            }, 
+            {
+                "name": "Julfest", 
                 "questions": [
                     {
                         "title": "Vad tycker du om AI",

@@ -34,6 +34,13 @@ public class EventsController : ControllerBase
         return Ok(eventList);
     }
 
+    [HttpGet("getquizzes/{id}")]
+    public async Task<IActionResult> GetQuizzes(string id)
+    {
+        var quizzes = await _eventService.GetQuizzes(id);
+        return Ok(quizzes);
+    }
+
     [HttpGet("{id}")]
     public async Task<Event> GetEventById(string id)
     {

@@ -1,5 +1,7 @@
 using FeedbackApp.Api.Data;
+using FeedbackApp.Api.Dto;
 using FeedbackApp.Api.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace FeedbackApp.Api.Services;
@@ -54,6 +56,19 @@ public class EventService
             Console.WriteLine($"Can't get the event with id: {id} due to {ex.Message}");
             return new Event();
         }
+    }
+
+    public async Task<List<QuizNameListDto>> GetQuizzes(string id)
+    {
+        var companyEvent = await GetEventById(id);
+        var quizList = companyEvent.Quizzes
+            .Select(e => new QuizNameListDto
+            {
+                Name = e.Name
+            })
+            .ToList();
+
+        return quizList;
     }
 
     public async Task<Quiz> GetQuizById(string eventId, int quizIndex)
