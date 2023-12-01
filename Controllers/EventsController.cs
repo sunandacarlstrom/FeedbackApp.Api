@@ -22,9 +22,16 @@ public class EventsController : ControllerBase
     }
 
     [HttpGet("getcompanyevents/{companyId}")]
-    public async Task<List<Event>> GetCompanyEvents(string companyId)
+    public async Task<IActionResult> GetCompanyEvents(string companyId)
     {
-        return await _eventService.GetCompanyEvents(companyId);
+        var events = await _eventService.GetCompanyEvents(companyId);
+        var eventList = events.Select(e => new
+        {
+            e.Id,
+            e.Name,
+        });
+
+        return Ok(eventList);
     }
 
     [HttpGet("{id}")]
