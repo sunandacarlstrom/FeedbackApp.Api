@@ -22,9 +22,23 @@ public class EventsController : ControllerBase
     }
 
     [HttpGet("getcompanyevents/{companyId}")]
-    public async Task<List<Event>> GetCompanyEvents(string companyId)
+    public async Task<IActionResult> GetCompanyEvents(string companyId)
     {
-        return await _eventService.GetCompanyEvents(companyId);
+        var events = await _eventService.GetCompanyEvents(companyId);
+        var eventList = events.Select(e => new
+        {
+            e.Id,
+            e.Name,
+        });
+
+        return Ok(eventList);
+    }
+
+    [HttpGet("getquizzes/{id}")]
+    public async Task<IActionResult> GetQuizzes(string id)
+    {
+        var quizzes = await _eventService.GetQuizzes(id);
+        return Ok(quizzes);
     }
 
     [HttpGet("{id}")]
@@ -33,12 +47,24 @@ public class EventsController : ControllerBase
         return await _eventService.GetEventById(id);
     }
 
+    [HttpGet("{eventId}/{quizIndex}")]
+    public async Task<Quiz> GetQuizById(string eventId, int quizIndex)
+    {
+        return await _eventService.GetQuizById(eventId, quizIndex);
+    }
+
+    [HttpGet("{eventId}/{quizIndex}/{questionIndex}")]
+    public async Task<Question> GetQuestionById(string eventId, int quizIndex, int questionIndex)
+    {
+        return await _eventService.GetQuestionById(eventId, quizIndex, questionIndex);
+    }
+
     [HttpPost]
     public async Task<IActionResult> AddEvent([FromBody] Event companyEvent)
     {
         if (!ModelState.IsValid) return BadRequest("Information is missing in order to create an event");
 
-        var result = await _eventService.CreateEvent(companyEvent);
+        var result = await _eventService.AddEvent(companyEvent);
 
         if (!result)
         {
@@ -48,16 +74,16 @@ public class EventsController : ControllerBase
         return CreatedAtAction(nameof(GetEventById), new { id = companyEvent.Id }, companyEvent);
     }
 
-    [HttpPost("{eventId}/{quizIndex}/{questionIndex}")]
-    public async Task<IActionResult> AddAnswer(string eventId, int quizIndex, int questionIndex, [FromBody] List<string> result)
+    [HttpPost("{eventId}/{quizIndex}")]
+    public async Task<IActionResult> AddQuestion(string eventId, int quizIndex, [FromBody] Question questions)
     {
         try
         {
-            var updateResult = await _eventService.AddAnswer(eventId, quizIndex, questionIndex, result);
+            var updateResult = await _eventService.AddQuestion(eventId, quizIndex, questions);
 
             if (updateResult.ModifiedCount > 0)
             {
-                return Ok("Answer is added successfully!");
+                return Ok("Question is added successfully!");
             }
             else
             {
@@ -71,16 +97,16 @@ public class EventsController : ControllerBase
         }
     }
 
-    [HttpPost("{eventId}/{quizIndex}")]
-    public async Task<IActionResult> AddQuestion(string eventId, int quizIndex, [FromBody] Question questions)
+    [HttpPost("{eventId}/{quizIndex}/{questionIndex}")]
+    public async Task<IActionResult> AddAnswer(string eventId, int quizIndex, int questionIndex, [FromBody] List<string> result)
     {
         try
         {
-            var updateResult = await _eventService.AddQuestion(eventId, quizIndex, questions);
+            var updateResult = await _eventService.AddAnswer(eventId, quizIndex, questionIndex, result);
 
             if (updateResult.ModifiedCount > 0)
             {
-                return Ok("Question is added successfully!");
+                return Ok("Answer is added successfully!");
             }
             else
             {
@@ -111,18 +137,18 @@ public class EventsController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteEvent(string id)
+    [HttpPatch("{eventId}/{quizIndex}/{questionIndex}")]
+    public async Task<IActionResult> EditQuestion(string eventId, int quizIndex, int questionIndex, [FromBody] Question updatedQuestion)
     {
-        var result = await _eventService.DeleteEvent(id);
+        var result = await _eventService.EditQuestion(eventId, quizIndex, questionIndex, updatedQuestion);
 
-        if (result.DeletedCount > 0)
+        if (result.ModifiedCount > 0)
         {
-            return Ok("The event was successfully deleted");
+            return Ok("Question updated successfully");
         }
         else
         {
-            return NotFound("The selected event isn't found");
+            return NotFound("Can't edit the question. Try again!");
         }
     }
 
@@ -138,6 +164,36 @@ public class EventsController : ControllerBase
         else
         {
             return NotFound($"There are no events found for company {companyId}");
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteEvent(string id)
+    {
+        var result = await _eventService.DeleteEvent(id);
+
+        if (result.DeletedCount > 0)
+        {
+            return Ok("The event was successfully deleted");
+        }
+        else
+        {
+            return NotFound("The selected event isn't found");
+        }
+    }
+
+    [HttpDelete("{eventId}/{quizIndex}/{questionIndex}")]
+    public async Task<IActionResult> DeleteQuestion(string eventId, int quizIndex, int questionIndex)
+    {
+        var result = await _eventService.DeleteQuestion(eventId, quizIndex, questionIndex);
+
+        if (result.ModifiedCount > 0)
+        {
+            return Ok("The selected question was successfully deleted");
+        }
+        else
+        {
+            return NotFound("The selected question isn't found");
         }
     }
 }

@@ -1,5 +1,7 @@
 using FeedbackApp.Api.Data;
+using FeedbackApp.Api.Dto;
 using FeedbackApp.Api.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace FeedbackApp.Api.Services;
@@ -54,10 +56,36 @@ public class EventService
             Console.WriteLine($"Can't get the event with id: {id} due to {ex.Message}");
             return new Event();
         }
-
     }
 
-    public async Task<bool> CreateEvent(Event companyEvent)
+    public async Task<List<QuizNameListDto>> GetQuizzes(string id)
+    {
+        var companyEvent = await GetEventById(id);
+        var quizList = companyEvent.Quizzes
+            .Select(e => new QuizNameListDto
+            {
+                Name = e.Name
+            })
+            .ToList();
+
+        return quizList;
+    }
+
+    public async Task<Quiz> GetQuizById(string eventId, int quizIndex)
+    {
+        var companyEvent = await GetEventById(eventId);
+        var selectedQuiz = companyEvent.Quizzes[quizIndex];
+        return selectedQuiz;
+    }
+
+    public async Task<Question> GetQuestionById(string eventId, int quizIndex, int questionIndex)
+    {
+        var companyEvent = await GetEventById(eventId);
+        var selectedQuestion = companyEvent.Quizzes[quizIndex].Questions[questionIndex];
+        return selectedQuestion;
+    }
+
+    public async Task<bool> AddEvent(Event companyEvent)
     {
         try
         {
@@ -69,6 +97,14 @@ public class EventService
             Console.WriteLine($"Can't create a new event due to {ex.Message}");
             return false;
         }
+    }
+
+    public async Task<UpdateResult> AddQuestion(string eventId, int quizIndex, Question questions)
+    {
+        var addQuestion = Builders<Event>.Update.Push(e => e.Quizzes[quizIndex].Questions, questions);
+
+        var updateResult = await _context.Events.UpdateOneAsync(e => e.Id == eventId, addQuestion);
+        return updateResult;
     }
 
     public async Task<UpdateResult> AddAnswer(string eventId, int quizIndex, int questionIndex, List<string> result)
@@ -84,14 +120,6 @@ public class EventService
         return updateResult;
     }
 
-    public async Task<UpdateResult> AddQuestion(string eventId, int quizIndex, Question questions)
-    {
-        var addQuestion = Builders<Event>.Update.Push(e => e.Quizzes[quizIndex].Questions, questions);
-
-        var updateResult = await _context.Events.UpdateOneAsync(e => e.Id == eventId, addQuestion);
-        return updateResult;
-    }
-
     public async Task<ReplaceOneResult> UpdateEvent(string id, Event companyEvent)
     {
         var result = await _context.Events
@@ -99,13 +127,40 @@ public class EventService
         return result;
     }
 
-    public async Task<DeleteResult> DeleteEvent(string id)
+    public async Task<UpdateResult> EditQuestion(string eventId, int quizIndex, int questionIndex, Question updatedQuestion)
     {
-        return await _context.Events.DeleteOneAsync(e => e.Id == id);
+        var filter = Builders<Event>.Filter.Eq(e => e.Id, eventId);
+
+        var update = Builders<Event>.Update
+            .Set(e => e.Quizzes[quizIndex].Questions[questionIndex].Title, updatedQuestion.Title)
+            .Set(e => e.Quizzes[quizIndex].Questions[questionIndex].Type, updatedQuestion.Type)
+            .Set(e => e.Quizzes[quizIndex].Questions[questionIndex].Options, updatedQuestion.Options)
+            .Set(e => e.Quizzes[quizIndex].Questions[questionIndex].Answers, updatedQuestion.Answers);
+
+        var result = await _context.Events.UpdateOneAsync(filter, update);
+        return result;
     }
 
     public async Task<DeleteResult> DeleteAllCompanyEvents(string companyId)
     {
         return await _context.Events.DeleteManyAsync(e => e.Id == companyId);
+    }
+
+    public async Task<DeleteResult> DeleteEvent(string id)
+    {
+        return await _context.Events.DeleteOneAsync(e => e.Id == id);
+    }
+
+    public async Task<UpdateResult> DeleteQuestion(string eventId, int quizIndex, int questionIndex)
+    {
+        var questionToRemove = await GetQuestionById(eventId, quizIndex, questionIndex);
+
+        var filter = Builders<Event>.Filter
+            .Where(e => e.Id == eventId);
+
+        var update = Builders<Event>.Update
+            .Pull(e => e.Quizzes[quizIndex].Questions, questionToRemove);
+
+        return await _context.Events.UpdateOneAsync(filter, update);
     }
 }
