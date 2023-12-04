@@ -44,7 +44,6 @@ Plugins or versions that the project requires, such as:
 https://dotnet.microsoft.com/en-us/download/visual-studio-sdks
 
     .NET 7.0.401
-    Lägsta SDK version: 7.0.401
 
 **Plugin:**
 
