@@ -24,7 +24,7 @@ List all links that are relevant to the project:
 
 ## Workflow
 
-The project follow TailwindCSS as particular design, but some components are desgined with DaisyUI.
+The project follow TailwindCSS as particular design.
 
 ## Known issues
 
