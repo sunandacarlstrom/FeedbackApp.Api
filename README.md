@@ -64,7 +64,11 @@ Microsoft.Extensions.Logging.Debug
 
  **Stage**
 
-_Put production instructions here_
+Run the development server in backend:
+
+```bash
+dotnet run
+```
 
  **Production**
 
