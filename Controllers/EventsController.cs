@@ -60,7 +60,7 @@ public class EventsController : ControllerBase
         return await _eventService.GetQuestionById(eventId, quizIndex, questionIndex);
     }
 
-    [HttpGet("{eventId}/{quizIndex}/{questionIndex}")]
+    [HttpGet("{eventId}/{quizIndex}/{questionIndex}/details")]
     public async Task<Question> GetQuestionByIdDetails(string eventId, int quizIndex, int questionIndex)
     {
         return await _eventService.GetQuestionByIdDetails(eventId, quizIndex, questionIndex);

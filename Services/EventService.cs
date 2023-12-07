@@ -86,7 +86,6 @@ public class EventService
             Title = selectedQuestion.Title,
             Options = selectedQuestion.Options,
             Type = selectedQuestion.Type, 
-            CurrentQuestionIndex = questionIndex, 
             TotalAmountOfQuestions = companyEvent.Quizzes[quizIndex].Questions.Count()
         };
 
