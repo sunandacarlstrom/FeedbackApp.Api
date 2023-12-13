@@ -1,3 +1,4 @@
+using FeedbackApp.Api.Dto;
 using FeedbackApp.Api.Models;
 using FeedbackApp.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -54,9 +55,15 @@ public class EventsController : ControllerBase
     }
 
     [HttpGet("{eventId}/{quizIndex}/{questionIndex}")]
-    public async Task<Question> GetQuestionById(string eventId, int quizIndex, int questionIndex)
+    public async Task<QuestionDto> GetQuestionById(string eventId, int quizIndex, int questionIndex)
     {
         return await _eventService.GetQuestionById(eventId, quizIndex, questionIndex);
+    }
+
+    [HttpGet("{eventId}/{quizIndex}/{questionIndex}/details")]
+    public async Task<Question> GetQuestionByIdDetails(string eventId, int quizIndex, int questionIndex)
+    {
+        return await _eventService.GetQuestionByIdDetails(eventId, quizIndex, questionIndex);
     }
 
     [HttpPost]

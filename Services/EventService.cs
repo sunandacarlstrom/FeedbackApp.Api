@@ -1,7 +1,6 @@
 using FeedbackApp.Api.Data;
 using FeedbackApp.Api.Dto;
 using FeedbackApp.Api.Models;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace FeedbackApp.Api.Services;
@@ -78,7 +77,22 @@ public class EventService
         return selectedQuiz;
     }
 
-    public async Task<Question> GetQuestionById(string eventId, int quizIndex, int questionIndex)
+    public async Task<QuestionDto> GetQuestionById(string eventId, int quizIndex, int questionIndex)
+    {
+        var companyEvent = await GetEventById(eventId);
+        var selectedQuestion = companyEvent.Quizzes[quizIndex].Questions[questionIndex];
+        var question = new QuestionDto
+        {
+            Title = selectedQuestion.Title,
+            Options = selectedQuestion.Options,
+            Type = selectedQuestion.Type, 
+            TotalAmountOfQuestions = companyEvent.Quizzes[quizIndex].Questions.Count()
+        };
+
+        return question;
+    }
+
+    public async Task<Question> GetQuestionByIdDetails(string eventId, int quizIndex, int questionIndex)
     {
         var companyEvent = await GetEventById(eventId);
         var selectedQuestion = companyEvent.Quizzes[quizIndex].Questions[questionIndex];
@@ -153,7 +167,7 @@ public class EventService
 
     public async Task<UpdateResult> DeleteQuestion(string eventId, int quizIndex, int questionIndex)
     {
-        var questionToRemove = await GetQuestionById(eventId, quizIndex, questionIndex);
+        var questionToRemove = await GetQuestionByIdDetails(eventId, quizIndex, questionIndex);
 
         var filter = Builders<Event>.Filter
             .Where(e => e.Id == eventId);
