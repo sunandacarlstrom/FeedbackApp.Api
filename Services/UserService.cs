@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using FeedbackApp.Api.Data;
 using FeedbackApp.Api.Dto;
 using FeedbackApp.Api.Models;
@@ -17,6 +18,42 @@ public class UserService
     public async Task<List<User>> GetUsers()
     {
         return await _context.Users.Find(new BsonDocument()).ToListAsync();
+    }
+
+    public async Task<User> GetUserById(string id)
+    {
+        try
+        {
+            return await _context.Users
+            .Find(u => u.Id == id)
+            .FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Can't get the user with id: {id} due to {ex.Message}");
+            return new User();
+        }
+    }
+
+    public async Task<User> GetUserFromToken(string token, JwtSettings jwtSettings)
+    {
+        var id = jwtSettings.GetClaim(token, JwtRegisteredClaimNames.Sub);
+        return await GetUserById(id);
+    }
+
+    public async Task<User?> GetLoginCredentials(LoginDto login)
+    {
+        try
+        {
+            return await _context.Users
+                .Find(u => u.UserName == login.UserName)
+                .FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Can't get the user's login credentials due to {ex.Message}");
+            return null;
+        }
     }
 
     public async Task CreateUser(User user)
