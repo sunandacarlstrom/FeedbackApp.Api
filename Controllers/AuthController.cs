@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto login)
     {
-        if (string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
+        if (string.IsNullOrEmpty(login.UserName) || string.IsNullOrEmpty(login.Password))
             return BadRequest("No entered username or password");
 
         User? dbUser = await _userService.GetLoginCredentials(login);
