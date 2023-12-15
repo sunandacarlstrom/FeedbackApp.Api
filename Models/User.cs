@@ -1,15 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using AspNetCore.Identity.MongoDbCore.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDbGenericRepository.Attributes;
 
 namespace FeedbackApp.Api.Models;
-public class User
-{
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string? Id { get; set; }
 
+[CollectionName("users")]
+public class User : MongoIdentityUser<ObjectId>
+{
     [Required]
     [BsonElement("username")]
     [JsonPropertyName("username")]
@@ -25,7 +25,6 @@ public class User
     [JsonPropertyName("permission")]
     public string? Permission { get; set; }
 
-    [Required]
     [BsonElement("company_permissions")]
     [JsonPropertyName("company_permissions")]
     public List<CompanyPermissions>? CompanyPermissions { get; set; }

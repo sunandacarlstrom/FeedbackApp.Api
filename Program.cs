@@ -3,7 +3,9 @@ using FeedbackApp.Api.Data;
 using FeedbackApp.Api.Models;
 using FeedbackApp.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +34,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddIdentity<User, Role>()
+    .AddMongoDbStores<User, Role, ObjectId>
+    (
+        builder.Configuration.GetSection("MongoDB")["ConnectionURI"],
+        builder.Configuration.GetSection("MongoDB")["DatabaseName"]
+    )
+    .AddDefaultTokenProviders();
 
 // Set up authentication...
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();

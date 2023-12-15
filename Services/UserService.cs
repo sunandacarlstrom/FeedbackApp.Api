@@ -25,7 +25,7 @@ public class UserService
         try
         {
             return await _context.Users
-            .Find(u => u.Id == id)
+            .Find(u => u.Id.ToString() == id)
             .FirstOrDefaultAsync();
         }
         catch (Exception ex)
