@@ -4,7 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace FeedbackApp.Api.Models;
-public class CompanyPermissions
+public class CompanyRole
 {
     [BsonElement("company_id")]
     [JsonPropertyName("company_id")]

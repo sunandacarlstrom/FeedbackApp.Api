@@ -41,8 +41,7 @@ public class AuthController : ControllerBase
         User newUser = new User
         {
             UserName = registerUser.UserName,
-            Password = registerUser.Password,
-            Permission = registerUser.Permission
+            PasswordHash = registerUser.Password
         };
 
         try
@@ -74,7 +73,7 @@ public class AuthController : ControllerBase
         if (dbUser == null)
             return Unauthorized();
 
-        if (!BCrypt.Net.BCrypt.Verify(loginUser.Password, dbUser.Password))
+        if (!BCrypt.Net.BCrypt.Verify(loginUser.Password, dbUser.PasswordHash))
             return Unauthorized();
 
         var roles = await _userManager.GetRolesAsync(dbUser);

@@ -67,22 +67,21 @@ public class UserService
         FilterDefinition<User> filter = Builders<User>.Filter.Eq("Id", id);
         UpdateDefinition<User> update = Builders<User>.Update
         .Set(u => u.UserName, user.UserName)
-        .Set(u => u.Password, user.Password)
-        .Set(u => u.Permission, user.Permission)
-        .Set(u => u.CompanyPermissions, user.CompanyPermissions);
+        .Set(u => u.PasswordHash, user.PasswordHash)
+        .Set(u => u.CompanyRoles, user.CompanyRoles);
 
         await _context.Users.UpdateOneAsync(filter, update);
         return;
     }
 
-    public async Task UpdateUserPermission(string id, UserPermissionDto model)
-    {
-        FilterDefinition<User> filter = Builders<User>.Filter.Eq("Id", id);
-        UpdateDefinition<User> update = Builders<User>.Update.Set(u => u.Permission, model.Permission);
+    // public async Task UpdateUserPermission(string id, UserPermissionDto model)
+    // {
+    //     FilterDefinition<User> filter = Builders<User>.Filter.Eq("Id", id);
+    //     UpdateDefinition<User> update = Builders<User>.Update.Set(u => u.Permission, model.Permission);
 
-        await _context.Users.UpdateOneAsync(filter, update);
-        return;
-    }
+    //     await _context.Users.UpdateOneAsync(filter, update);
+    //     return;
+    // }
 
     public async Task DeleteUser(string id)
     {

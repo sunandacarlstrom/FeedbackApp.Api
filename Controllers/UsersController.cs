@@ -38,12 +38,12 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateUserPermission(string id, [FromBody] UserPermissionDto model)
-    {
-        await _userService.UpdateUserPermission(id, model);
-        return NoContent();
-    }
+    // [HttpPatch("{id}")]
+    // public async Task<IActionResult> UpdateUserPermission(string id, [FromBody] UserPermissionDto model)
+    // {
+    //     await _userService.UpdateUserPermission(id, model);
+    //     return NoContent();
+    // }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id)
