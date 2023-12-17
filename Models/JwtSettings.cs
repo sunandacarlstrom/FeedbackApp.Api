@@ -57,7 +57,6 @@ public class JwtSettings
 
         var subClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == claim);
 
-
         return subClaim?.Value;
     }
 }

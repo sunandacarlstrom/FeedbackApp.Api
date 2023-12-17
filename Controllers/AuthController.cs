@@ -28,19 +28,19 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterDto registerUser)
+    public async Task<IActionResult> Register([FromBody] CredentialsDto registerUser)
     {
         if (registerUser == null)
             return BadRequest("Invalid user data");
 
-        if (string.IsNullOrEmpty(registerUser.UserName) || string.IsNullOrEmpty(registerUser.Password))
+        if (string.IsNullOrEmpty(registerUser.Email) || string.IsNullOrEmpty(registerUser.Password))
             return BadRequest("Invalid username or password");
 
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(registerUser.Password);
 
         User newUser = new User
         {
-            UserName = registerUser.UserName,
+            UserName = registerUser.Email,
             PasswordHash = registerUser.Password
         };
 
@@ -63,10 +63,10 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginDto loginUser)
+    public async Task<IActionResult> Login([FromBody] CredentialsDto loginUser)
     {
-        if (string.IsNullOrEmpty(loginUser.UserName) || string.IsNullOrEmpty(loginUser.Password))
-            return BadRequest("No entered username or password");
+        if (string.IsNullOrEmpty(loginUser.Email) || string.IsNullOrEmpty(loginUser.Password))
+            return BadRequest("No entered email or password");
 
         User? dbUser = await _userService.GetLoginCredentials(loginUser);
 

@@ -41,12 +41,12 @@ public class UserService
         return await GetUserById(id);
     }
 
-    public async Task<User?> GetLoginCredentials(LoginDto login)
+    public async Task<User?> GetLoginCredentials(CredentialsDto login)
     {
         try
         {
             return await _context.Users
-                .Find(u => u.UserName == login.UserName)
+                .Find(u => u.Email == login.Email)
                 .FirstOrDefaultAsync();
         }
         catch (Exception ex)
