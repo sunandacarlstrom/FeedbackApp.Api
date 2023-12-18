@@ -1,15 +1,13 @@
 [
     {
-        "username": "sunandacarlstrom",
+        "email": "sunandacarlstrom@knowit.se",
         "password": "asdf1234",
-        "permission": "superuser",
-        "company_permissions": []
+        "company_roles": []
     },
     {
-        "username": "fredrikhansson",
+        "email": "fredrikhansson@knowit.se",
         "password": "know!T123",
-        "permission": "user",
-        "company_permissions": [
+        "company_roles": [
             {
                 "company_id": {
                     "$oid": "655f2b39135d0949439962bf"

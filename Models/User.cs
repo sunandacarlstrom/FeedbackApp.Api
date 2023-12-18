@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using AspNetCore.Identity.MongoDbCore.Models;
 using MongoDB.Bson;
