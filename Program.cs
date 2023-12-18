@@ -102,7 +102,7 @@ var adminSettings = builder.Configuration
     .GetSection(nameof(AdminSettings))
     .Get<AdminSettings>();
 
-await SeedData.LoadUserData(userService, userManager, adminSettings);
+await SeedData.LoadUserData(userService, adminSettings);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

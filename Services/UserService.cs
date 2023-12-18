@@ -71,22 +71,51 @@ public class UserService
         }
     }
 
+    public async Task<Role?> GetRoleByName(string name)
+    {
+        var normalizedName = name.ToUpper();
+        return await _context.Roles
+            .Find(r => r.NormalizedName == normalizedName)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task CreateUser(User user)
     {
         await _context.Users.InsertOneAsync(user);
         return;
     }
 
-    public async Task UpdateUser(string id, User user)
+    public async Task UpdateUser(ObjectId id, User user)
     {
-        FilterDefinition<User> filter = Builders<User>.Filter.Eq("Id", id);
+
+        FilterDefinition<User> filter = Builders<User>.Filter.Eq("_id", id);
         UpdateDefinition<User> update = Builders<User>.Update
-        .Set(u => u.UserName, user.UserName)
-        .Set(u => u.PasswordHash, user.PasswordHash)
+        .Set(u => u.PasswordHash, BCrypt.Net.BCrypt.HashPassword(user.PasswordHash))
         .Set(u => u.CompanyRoles, user.CompanyRoles);
 
         await _context.Users.UpdateOneAsync(filter, update);
         return;
+    }
+
+    public async Task<UpdateResult?> AddRoleToUser(ObjectId userId, string roleName)
+    {
+        var dbUser = await GetUserById(userId.ToString());
+        var role = await GetRoleByName(roleName);
+
+        if (dbUser == null || role == null)
+        {
+            Console.WriteLine("Can't find user or role");
+            return null;
+        }
+
+        var updatedRoleList = dbUser.Roles;
+        updatedRoleList.Add(role.Id);
+
+        FilterDefinition<User> filter = Builders<User>.Filter.Eq("_id", userId);
+        UpdateDefinition<User> update = Builders<User>.Update
+        .Set(u => u.Roles, updatedRoleList);
+
+        return await _context.Users.UpdateOneAsync(filter, update);
     }
 
     // public async Task UpdateUserPermission(string id, UserPermissionDto model)

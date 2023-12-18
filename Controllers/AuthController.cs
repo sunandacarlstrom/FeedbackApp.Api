@@ -40,20 +40,27 @@ public class AuthController : ControllerBase
 
         User newUser = new User
         {
-            UserName = registerUser.Email,
+            Email = registerUser.Email,
             PasswordHash = registerUser.Password
         };
 
         try
         {
-            _userService.CreateUser(newUser);
+            await _userService.CreateUser(newUser);
 
-            var roleResult = await _userManager.AddToRoleAsync(newUser, "Admin");
+            var roleResult = await _userService.AddRoleToUser(newUser.Id, "User");
 
-            if (roleResult.Errors.Any())
-                return BadRequest("Can't assign role to user!");
+            if (roleResult == null)
+            {
+                return BadRequest("Can't find role or user");
+            }
 
-            return CreatedAtAction(nameof(Register), newUser);
+            if (roleResult.IsAcknowledged || roleResult.MatchedCount > 0 || roleResult.ModifiedCount > 0)
+            {
+                return CreatedAtAction(nameof(Register), newUser);
+            }
+
+            return BadRequest($"Can't assign role to user due to {roleResult}");
         }
         catch (Exception ex)
         {
@@ -88,5 +95,5 @@ public class AuthController : ControllerBase
     {
         await _signInManager.SignOutAsync();
         return Ok("Logged out successfully");
-    } 
+    }
 }

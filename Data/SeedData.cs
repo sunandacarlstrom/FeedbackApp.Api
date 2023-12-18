@@ -28,29 +28,17 @@ namespace FeedbackApp.Api.Data
             }
         }
 
-        public static async Task LoadUserData(UserService userService, UserManager<User> userManager, AdminSettings admin)
+        public static async Task LoadUserData(UserService userService, AdminSettings admin)
         {
-            await CreateAdmin(userService, userManager, admin);
-
-            var user = new User
-            {
-                Email = "sunandacarlstrom@knowit.se"
-            };
-
-            // var result = await userManager.CreateAsync(user, "YourSecurePassword");
-
-            // if (result.Succeeded)
-            // {
-            //     await userManager.AddToRoleAsync(user, "Admin");
-            // }
-            // else
-            // {
-            //     Console.WriteLine($"Error creating user 'sunandacarlstrom@knowit.se': {string.Join(", ", result.Errors)}");
-            // }
-
+            // await CreateUsers(userService);
+            await CreateAdmin(userService, admin);
         }
 
-        private static async Task CreateAdmin(UserService userService, UserManager<User> userManager, AdminSettings adminSettings)
+        private static async Task CreateUsers(UserService userService)
+        {
+        }
+
+        private static async Task CreateAdmin(UserService userService, AdminSettings adminSettings)
         {
             if (await userService.GetUserByEmail(adminSettings.Email) != null)
             {
@@ -67,8 +55,7 @@ namespace FeedbackApp.Api.Data
             };
 
             await userService.CreateUser(admin);
-
-            await userManager.AddToRolesAsync(admin, new[] { "Admin" });
+            await userService.AddRoleToUser(admin.Id, "Admin");
         }
     }
 }
