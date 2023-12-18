@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FeedbackApp.Api.Controllers;
 
 [ApiController]
-// [Authorize(Policy = "Admin")]
+[Authorize(Policy = "Admin")]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
@@ -63,6 +63,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login([FromBody] CredentialsDto loginUser)
     {
         if (string.IsNullOrEmpty(loginUser.Email) || string.IsNullOrEmpty(loginUser.Password))
@@ -81,4 +83,10 @@ public class AuthController : ControllerBase
 
         return Ok(new { Token = serializedToken });
     }
+
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return Ok("Logged out successfully");
+    } 
 }

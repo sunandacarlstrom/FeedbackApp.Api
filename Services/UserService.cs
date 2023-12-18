@@ -20,7 +20,7 @@ public class UserService
         return await _context.Users.Find(new BsonDocument()).ToListAsync();
     }
 
-    public async Task<User> GetUserById(string id)
+    public async Task<User?> GetUserById(string id)
     {
         try
         {
@@ -31,7 +31,22 @@ public class UserService
         catch (Exception ex)
         {
             Console.WriteLine($"Can't get the user with id: {id} due to {ex.Message}");
-            return new User();
+            return null;
+        }
+    }
+
+    public async Task<User?> GetUserByEmail(string email)
+    {
+        try
+        {
+            return await _context.Users
+            .Find(u => u.Email == email)
+            .FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Can't get the user with email: {email} due to {ex.Message}");
+            return null;
         }
     }
 

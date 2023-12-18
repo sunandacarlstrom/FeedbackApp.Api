@@ -7,5 +7,6 @@ namespace FeedbackApp.Api.Models;
 [CollectionName("roles")]
 public class Role : MongoIdentityRole<ObjectId>
 {
-
+    public Role() { }
+    public Role(string roleName) : base(roleName) { }
 }

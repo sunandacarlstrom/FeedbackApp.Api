@@ -1,10 +1,14 @@
 [
     {
+        "first_name": "Sunanda",
+        "last_name": "Carlström",
         "email": "sunandacarlstrom@knowit.se",
         "password": "asdf1234",
         "company_roles": []
     },
     {
+        "first_name": "Fredrik",
+        "last_name": "Hansson",
         "email": "fredrikhansson@knowit.se",
         "password": "know!T123",
         "company_roles": [
