@@ -20,18 +20,33 @@ public class UserService
         return await _context.Users.Find(new BsonDocument()).ToListAsync();
     }
 
-    public async Task<User> GetUserById(string id)
+    public async Task<User?> GetUserById(string id)
     {
         try
         {
             return await _context.Users
-            .Find(u => u.Id == id)
+            .Find(u => u.Id.ToString() == id)
             .FirstOrDefaultAsync();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Can't get the user with id: {id} due to {ex.Message}");
-            return new User();
+            return null;
+        }
+    }
+
+    public async Task<User?> GetUserByEmail(string email)
+    {
+        try
+        {
+            return await _context.Users
+            .Find(u => u.Email == email)
+            .FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Can't get the user with email: {email} due to {ex.Message}");
+            return null;
         }
     }
 
@@ -41,12 +56,12 @@ public class UserService
         return await GetUserById(id);
     }
 
-    public async Task<User?> GetLoginCredentials(LoginDto login)
+    public async Task<User?> GetLoginCredentials(CredentialsDto login)
     {
         try
         {
             return await _context.Users
-                .Find(u => u.UserName == login.UserName)
+                .Find(u => u.Email == login.Email)
                 .FirstOrDefaultAsync();
         }
         catch (Exception ex)
@@ -56,33 +71,61 @@ public class UserService
         }
     }
 
+    public async Task<Role?> GetRoleByName(string name)
+    {
+        var normalizedName = name.ToUpper();
+        return await _context.Roles
+            .Find(r => r.NormalizedName == normalizedName)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task CreateUser(User user)
     {
         await _context.Users.InsertOneAsync(user);
         return;
     }
 
-    public async Task UpdateUser(string id, User user)
+    public async Task UpdateUser(ObjectId id, User user)
     {
-        FilterDefinition<User> filter = Builders<User>.Filter.Eq("Id", id);
+
+        FilterDefinition<User> filter = Builders<User>.Filter.Eq("_id", id);
         UpdateDefinition<User> update = Builders<User>.Update
-        .Set(u => u.UserName, user.UserName)
-        .Set(u => u.Password, user.Password)
-        .Set(u => u.Permission, user.Permission)
-        .Set(u => u.CompanyPermissions, user.CompanyPermissions);
+        .Set(u => u.PasswordHash, BCrypt.Net.BCrypt.HashPassword(user.PasswordHash))
+        .Set(u => u.CompanyRoles, user.CompanyRoles);
 
         await _context.Users.UpdateOneAsync(filter, update);
         return;
     }
 
-    public async Task UpdateUserPermission(string id, UserPermissionDto model)
+    public async Task<UpdateResult?> AddRoleToUser(ObjectId userId, string roleName)
     {
-        FilterDefinition<User> filter = Builders<User>.Filter.Eq("Id", id);
-        UpdateDefinition<User> update = Builders<User>.Update.Set(u => u.Permission, model.Permission);
+        var dbUser = await GetUserById(userId.ToString());
+        var role = await GetRoleByName(roleName);
 
-        await _context.Users.UpdateOneAsync(filter, update);
-        return;
+        if (dbUser == null || role == null)
+        {
+            Console.WriteLine("Can't find user or role");
+            return null;
+        }
+
+        var updatedRoleList = dbUser.Roles;
+        updatedRoleList.Add(role.Id);
+
+        FilterDefinition<User> filter = Builders<User>.Filter.Eq("_id", userId);
+        UpdateDefinition<User> update = Builders<User>.Update
+        .Set(u => u.Roles, updatedRoleList);
+
+        return await _context.Users.UpdateOneAsync(filter, update);
     }
+
+    // public async Task UpdateUserPermission(string id, UserPermissionDto model)
+    // {
+    //     FilterDefinition<User> filter = Builders<User>.Filter.Eq("Id", id);
+    //     UpdateDefinition<User> update = Builders<User>.Update.Set(u => u.Permission, model.Permission);
+
+    //     await _context.Users.UpdateOneAsync(filter, update);
+    //     return;
+    // }
 
     public async Task DeleteUser(string id)
     {

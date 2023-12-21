@@ -1,8 +1,8 @@
-using System.Security;
 using FeedbackApp.Api.Dto;
 using FeedbackApp.Api.Models;
 using FeedbackApp.Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 
 namespace FeedbackApp.Api.Controllers;
 
@@ -33,17 +33,17 @@ public class UsersController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUser(string id, [FromBody] User user)
     {
-        await _userService.UpdateUser(id, user);
+        await _userService.UpdateUser(ObjectId.Parse(id), user);
 
         return NoContent();
     }
 
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateUserPermission(string id, [FromBody] UserPermissionDto model)
-    {
-        await _userService.UpdateUserPermission(id, model);
-        return NoContent();
-    }
+    // [HttpPatch("{id}")]
+    // public async Task<IActionResult> UpdateUserPermission(string id, [FromBody] UserPermissionDto model)
+    // {
+    //     await _userService.UpdateUserPermission(id, model);
+    //     return NoContent();
+    // }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id)

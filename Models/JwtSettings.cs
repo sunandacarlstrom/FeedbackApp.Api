@@ -1,3 +1,5 @@
+
+
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -21,8 +23,7 @@ public class JwtSettings
 
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id)
-            // new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
         };
 
         foreach (var role in userRole)
@@ -55,7 +56,6 @@ public class JwtSettings
         var jwtToken = tokenHandler.ReadJwtToken(token);
 
         var subClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == claim);
-
 
         return subClaim?.Value;
     }

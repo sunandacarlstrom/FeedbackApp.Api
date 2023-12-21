@@ -1,11 +1,17 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using FeedbackApp.Api.Data;
 using FeedbackApp.Api.Models;
 using FeedbackApp.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
+using MongoDB.Bson.IO;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Connect to MongoDB
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
@@ -32,6 +38,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddIdentity<User, Role>()
+    .AddMongoDbStores<User, Role, ObjectId>
+    (
+        builder.Configuration.GetSection("MongoDB")["ConnectionURI"],
+        builder.Configuration.GetSection("MongoDB")["DatabaseName"]
+    )
+    .AddDefaultTokenProviders();
 
 // Set up authentication...
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
@@ -72,6 +86,24 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
+// Seed the database...
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+var context = services.GetRequiredService<FeedbackAppContext>();
+var userService = services.GetRequiredService<UserService>();
+var userManager = services.GetRequiredService<UserManager<User>>();
+var roleManager = services.GetRequiredService<RoleManager<Role>>();
+
+await SeedData.LoadRoles(roleManager);
+
+// Get admin settings for use in SeedData
+var adminSettings = builder.Configuration
+    .GetSection(nameof(AdminSettings))
+    .Get<AdminSettings>();
+
+await SeedData.LoadUserData(userService, adminSettings);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -83,6 +115,7 @@ app.UseCors("NextJSPolicy");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
