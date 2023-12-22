@@ -8,9 +8,9 @@
         "company_id": {
             "$oid": "655f2b39135d0949439962bf"
         },
-        "quizzes": [ 
+        "quizzes": [
             {
-                "name": "Feedback", 
+                "name": "Feedback",
                 "questions": [
                     {
                         "title": "Vad tycker du om AI",
@@ -43,9 +43,9 @@
                         ]
                     }
                 ]
-            }, 
+            },
             {
-                "name": "Julfest", 
+                "name": "Julfest",
                 "questions": [
                     {
                         "title": "Vad tycker du om AI",
@@ -99,6 +99,7 @@
                         "options": [],
                         "answers": [
                             {
+                                "sessonId": "ac942a6b-7d15-4136-93fa-f97fb71ac455",
                                 "result": ["Anordna fler evenemang för studenter"]
                             }
                         ]
@@ -109,6 +110,7 @@
                         "options": ["1", "2", "3", "4", "5"],
                         "answers": [
                             {
+                                "sessonId": "f08e7aa4-384a-4e75-a291-a5e6686d6591",
                                 "result": ["3"]
                             }
                         ]

@@ -99,6 +99,8 @@ public class EventService
         return selectedQuestion;
     }
 
+    public Guid GetSession() => Guid.NewGuid();
+
     public async Task<bool> AddEvent(Event companyEvent)
     {
         try
@@ -121,11 +123,12 @@ public class EventService
         return updateResult;
     }
 
-    public async Task<UpdateResult> AddAnswer(string eventId, int quizIndex, int questionIndex, List<string> result)
+    public async Task<UpdateResult> AddAnswer(string eventId, int quizIndex, int questionIndex, Answer answerData)
     {
         var answers = new Answer
         {
-            Result = result
+            Session = answerData.Session,
+            Result = answerData.Result
         };
 
         var addAnswer = Builders<Event>.Update.Push(e => e.Quizzes[quizIndex].Questions[questionIndex].Answers, answers);
