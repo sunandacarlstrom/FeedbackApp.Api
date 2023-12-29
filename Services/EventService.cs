@@ -123,15 +123,15 @@ public class EventService
         return updateResult;
     }
 
-    public async Task<UpdateResult> AddAnswer(string eventId, int quizIndex, int questionIndex, Answer answerData)
+    public async Task<UpdateResult> AddAnswer(string eventId, int quizIndex, int questionIndex, Answer answer)
     {
-        var answers = new Answer
-        {
-            Session = answerData.Session,
-            Result = answerData.Result
-        };
+        // var answers = new Answer
+        // {
+        //     Session = answerData.Session,
+        //     Result = answerData.Result
+        // };
 
-        var addAnswer = Builders<Event>.Update.Push(e => e.Quizzes[quizIndex].Questions[questionIndex].Answers, answers);
+        var addAnswer = Builders<Event>.Update.Push(e => e.Quizzes[quizIndex].Questions[questionIndex].Answers, answer);
 
         var updateResult = await _context.Events.UpdateOneAsync(e => e.Id == eventId, addAnswer);
         return updateResult;

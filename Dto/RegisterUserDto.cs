@@ -3,8 +3,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FeedbackApp.Api.Dto;
 
-public class CredentialsDto
+public class RegisterUserDto
 {
+    [Required(ErrorMessage = "First Name is required")]
+    [DisplayName("First Name")]
+    public string FirstName { get; set; }
+
+    [Required(ErrorMessage = "Last Name is required")]
+    [DisplayName("Last Name")]
+    public string LastName { get; set; }
+
     [Required(ErrorMessage = "Email is required")]
     [EmailAddress(ErrorMessage = "Invalid Email")]
     public string Email { get; set; }

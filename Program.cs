@@ -1,5 +1,4 @@
 using System.Text;
-using System.Text.Json.Serialization;
 using FeedbackApp.Api.Data;
 using FeedbackApp.Api.Models;
 using FeedbackApp.Api.Services;
@@ -7,11 +6,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
-using MongoDB.Bson.IO;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 // Connect to MongoDB
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
@@ -35,7 +31,6 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -82,6 +77,7 @@ builder.Services.AddAuthentication(o =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("User", policy => policy.RequireRole("User"));
 });
 
 var app = builder.Build();

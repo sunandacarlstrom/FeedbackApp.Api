@@ -30,8 +30,8 @@ namespace FeedbackApp.Api.Data
 
         public static async Task LoadUserData(UserService userService, AdminSettings admin)
         {
-            // await CreateUsers(userService);
             await CreateAdmin(userService, admin);
+            //TODO: await CreateUsers(userService);
         }
 
         private static async Task CreateUsers(UserService userService)
@@ -55,6 +55,7 @@ namespace FeedbackApp.Api.Data
             };
 
             await userService.CreateUser(admin);
+            await userService.AddRoleToUser(admin.Id, "User");
             await userService.AddRoleToUser(admin.Id, "Admin");
         }
     }

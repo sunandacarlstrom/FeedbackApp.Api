@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace FeedbackApp.Api.Controllers;
 
 [ApiController]
-[Authorize(Policy = "Admin")]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
@@ -27,8 +26,9 @@ public class AuthController : ControllerBase
         _signInManager = signInManager;
     }
 
+    [Authorize(Policy = "Admin")]
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] CredentialsDto registerUser)
+    public async Task<IActionResult> Register([FromBody] RegisterUserDto registerUser)
     {
         if (registerUser == null)
             return BadRequest("Invalid user data");
@@ -36,12 +36,13 @@ public class AuthController : ControllerBase
         if (string.IsNullOrEmpty(registerUser.Email) || string.IsNullOrEmpty(registerUser.Password))
             return BadRequest("Invalid username or password");
 
-        string passwordHash = BCrypt.Net.BCrypt.HashPassword(registerUser.Password);
-
         User newUser = new User
         {
+            FirstName = registerUser.FirstName,
+            LastName = registerUser.LastName,
             Email = registerUser.Email,
-            PasswordHash = registerUser.Password
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerUser.Password),
+            SecurityStamp = Guid.NewGuid().ToString()
         };
 
         try
@@ -70,9 +71,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    [AllowAnonymous]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login([FromBody] CredentialsDto loginUser)
+    // [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login([FromBody] LoginUserDto loginUser)
     {
         if (string.IsNullOrEmpty(loginUser.Email) || string.IsNullOrEmpty(loginUser.Password))
             return BadRequest("No entered email or password");
