@@ -99,6 +99,8 @@ public class EventService
         return selectedQuestion;
     }
 
+    public Guid GetSession() => Guid.NewGuid();
+
     public async Task<bool> AddEvent(Event companyEvent)
     {
         try
@@ -121,14 +123,15 @@ public class EventService
         return updateResult;
     }
 
-    public async Task<UpdateResult> AddAnswer(string eventId, int quizIndex, int questionIndex, List<string> result)
+    public async Task<UpdateResult> AddAnswer(string eventId, int quizIndex, int questionIndex, Answer answer)
     {
-        var answers = new Answer
-        {
-            Result = result
-        };
+        // var answers = new Answer
+        // {
+        //     Session = answerData.Session,
+        //     Result = answerData.Result
+        // };
 
-        var addAnswer = Builders<Event>.Update.Push(e => e.Quizzes[quizIndex].Questions[questionIndex].Answers, answers);
+        var addAnswer = Builders<Event>.Update.Push(e => e.Quizzes[quizIndex].Questions[questionIndex].Answers, answer);
 
         var updateResult = await _context.Events.UpdateOneAsync(e => e.Id == eventId, addAnswer);
         return updateResult;

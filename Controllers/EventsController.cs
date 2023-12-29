@@ -1,11 +1,13 @@
 using FeedbackApp.Api.Dto;
 using FeedbackApp.Api.Models;
 using FeedbackApp.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FeedbackApp.Api.Controllers;
 
 [ApiController]
+[Authorize(Policy = "User")]
 [Route("api/[controller]")]
 public class EventsController : ControllerBase
 {
@@ -66,6 +68,12 @@ public class EventsController : ControllerBase
         return await _eventService.GetQuestionByIdDetails(eventId, quizIndex, questionIndex);
     }
 
+    [HttpGet("startSession")]
+    public IActionResult GetSession()
+    {
+        return new JsonResult(new { SessionId = Guid.NewGuid() });
+    }
+
     [HttpPost]
     public async Task<IActionResult> AddEvent([FromBody] Event companyEvent)
     {
@@ -105,11 +113,11 @@ public class EventsController : ControllerBase
     }
 
     [HttpPost("{eventId}/{quizIndex}/{questionIndex}")]
-    public async Task<IActionResult> AddAnswer(string eventId, int quizIndex, int questionIndex, [FromBody] List<string> result)
+    public async Task<IActionResult> AddAnswer(string eventId, int quizIndex, int questionIndex, [FromBody] Answer answer)
     {
         try
         {
-            var updateResult = await _eventService.AddAnswer(eventId, quizIndex, questionIndex, result);
+            var updateResult = await _eventService.AddAnswer(eventId, quizIndex, questionIndex, answer);
 
             if (updateResult.ModifiedCount > 0)
             {

@@ -56,7 +56,7 @@ public class UserService
         return await GetUserById(id);
     }
 
-    public async Task<User?> GetLoginCredentials(CredentialsDto login)
+    public async Task<User?> GetLoginCredentials(LoginUserDto login)
     {
         try
         {
