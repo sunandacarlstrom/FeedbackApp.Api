@@ -56,6 +56,17 @@ public class UserService
         return await GetUserById(id);
     }
 
+    public string GetTokenFromWebBrowser(HttpContext httpContext)
+    {
+        var authHeader = httpContext.Request.Headers["Authorization"].FirstOrDefault();
+        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer"))
+        {
+            return null;
+        }
+        var token = authHeader.Split(" ")[1];
+        return token;
+    }
+
     public async Task<User?> GetLoginCredentials(LoginUserDto login)
     {
         try
