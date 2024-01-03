@@ -1,12 +1,14 @@
 using FeedbackApp.Api.Dto;
 using FeedbackApp.Api.Models;
 using FeedbackApp.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 
 namespace FeedbackApp.Api.Controllers;
 
 [ApiController]
+[Authorize(Policy = "Admin")]
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
