@@ -12,7 +12,6 @@ public class CompanyService
         _context = context;
     }
 
-    // TODO: Ändra alla endpoints i CompanyService + CompanyController
     public async Task<List<Company>> GetCompanies()
     {
         return await _context.Companies.Find(new BsonDocument()).ToListAsync();

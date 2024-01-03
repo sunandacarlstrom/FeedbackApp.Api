@@ -31,7 +31,29 @@ public class CompaniesController : ControllerBase
     {
         var token = _userService.GetTokenFromWebBrowser(HttpContext);
         var user = await _userService.GetUserFromToken(token, _jwtSettings);
-        if(user == null || user.CompanyRoles == null)
+
+        if (user == null)
+            return new List<CompanyRole>();
+
+        var userRoles = await _userService.GetUserRole(user.Id);
+        var adminRole = await _userService.GetRoleByName("ADMIN");
+
+        if (adminRole != null && userRoles.Any(ur => ur.Id == adminRole.Id))
+        {
+            var companies = await _companyService.GetCompanies();
+            var companiesRoles = companies
+                .Select((c) => new CompanyRole
+                {
+                    CompanyId = c.Id,
+                    CompanyName = c.FullName,
+                    Permission = "admin"
+                })
+                .ToList();
+
+            return companiesRoles;
+        }
+
+        if (user.CompanyRoles == null)
             return new List<CompanyRole>();
 
         return user.CompanyRoles;
