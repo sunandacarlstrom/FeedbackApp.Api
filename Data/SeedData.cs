@@ -10,6 +10,7 @@ namespace FeedbackApp.Api.Data
         {
             await CreateRole(roleManager, "Admin");
             await CreateRole(roleManager, "User");
+            await CreateRole(roleManager, "Guest");
         }
 
         private static async Task CreateRole(RoleManager<Role> roleManager, string name)
@@ -30,12 +31,18 @@ namespace FeedbackApp.Api.Data
 
         public static async Task LoadUserData(UserService userService, AdminSettings admin)
         {
+            await CreateUsers(userService);
             await CreateAdmin(userService, admin);
-            //TODO: await CreateUsers(userService);
         }
 
         private static async Task CreateUsers(UserService userService)
         {
+            var users = await userService.GetUsers();
+            if (users.Count > 0)
+            {
+                return;
+            }
+            // TODO Läs in från Data/Json/users.json
         }
 
         private static async Task CreateAdmin(UserService userService, AdminSettings adminSettings)

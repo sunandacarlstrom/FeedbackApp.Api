@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using FeedbackApp.Api.Data;
 using FeedbackApp.Api.Dto;
 using FeedbackApp.Api.Models;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -54,6 +55,17 @@ public class UserService
     {
         var id = jwtSettings.GetClaim(token, JwtRegisteredClaimNames.Sub);
         return await GetUserById(id);
+    }
+
+    public string GetTokenFromWebBrowser(HttpContext httpContext)
+    {
+        var authHeader = httpContext.Request.Headers["Authorization"].FirstOrDefault();
+        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer"))
+        {
+            return null;
+        }
+        var token = authHeader.Split(" ")[1];
+        return token;
     }
 
     public async Task<User?> GetLoginCredentials(LoginUserDto login)
@@ -116,6 +128,26 @@ public class UserService
         .Set(u => u.Roles, updatedRoleList);
 
         return await _context.Users.UpdateOneAsync(filter, update);
+    }
+
+    public async Task<List<Role>> GetUserRole(ObjectId userId)
+    {
+        var dbUser = await GetUserById(userId.ToString());
+        var roles = new List<Role>();
+
+        dbUser?.Roles.ForEach(async role =>
+        {
+            roles.Add(await FindRoleById(role));
+        });
+
+        return roles;
+    }
+
+    public async Task<Role> FindRoleById(ObjectId id)
+    {
+        return await _context.Roles
+        .Find(r => r.Id == id)
+        .FirstOrDefaultAsync();
     }
 
     // public async Task UpdateUserPermission(string id, UserPermissionDto model)

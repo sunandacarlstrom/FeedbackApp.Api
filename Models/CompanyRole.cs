@@ -7,12 +7,12 @@ namespace FeedbackApp.Api.Models;
 public class CompanyRole
 {
     [BsonElement("company_id")]
-    [JsonPropertyName("company_id")]
+    [JsonPropertyName("id")]
     [BsonRepresentation(BsonType.ObjectId)]
     public string? CompanyId { get; set; }
 
     [BsonElement("company_full_name")]
-    [JsonPropertyName("company_full_name")]
+    [JsonPropertyName("full_name")]
     public string? CompanyName { get; set; }
 
     [BsonElement("permission")]
