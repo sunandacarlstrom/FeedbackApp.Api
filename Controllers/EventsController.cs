@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FeedbackApp.Api.Controllers;
 
 [ApiController]
-[Authorize(Policy = "User")]
+[Authorize]
 [Route("api/[controller]")]
 public class EventsController : ControllerBase
 {
@@ -18,12 +18,14 @@ public class EventsController : ControllerBase
         _eventService = eventService;
     }
 
+    [Authorize(Policy = "User")]
     [HttpGet]
     public async Task<List<Event>> GetAllEvents()
     {
         return await _eventService.GetAllEvents();
     }
 
+    [Authorize(Policy = "User")]
     [HttpGet("getcompanyevents/{companyId}")]
     public async Task<IActionResult> GetCompanyEvents(string companyId)
     {
@@ -37,6 +39,7 @@ public class EventsController : ControllerBase
         return Ok(eventList);
     }
 
+    [Authorize(Policy = "User")]
     [HttpGet("getquizzes/{id}")]
     public async Task<IActionResult> GetQuizzes(string id)
     {
@@ -44,12 +47,14 @@ public class EventsController : ControllerBase
         return Ok(quizzes);
     }
 
+    [Authorize(Policy = "User")]
     [HttpGet("{id}")]
     public async Task<Event> GetEventById(string id)
     {
         return await _eventService.GetEventById(id);
     }
 
+    [Authorize(Policy = "User")]
     [HttpGet("{eventId}/{quizIndex}")]
     public async Task<Quiz> GetQuizById(string eventId, int quizIndex)
     {
@@ -62,6 +67,7 @@ public class EventsController : ControllerBase
         return await _eventService.GetQuestionById(eventId, quizIndex, questionIndex);
     }
 
+    [Authorize(Policy = "User")]
     [HttpGet("{eventId}/{quizIndex}/{questionIndex}/details")]
     public async Task<Question> GetQuestionByIdDetails(string eventId, int quizIndex, int questionIndex)
     {
@@ -74,6 +80,7 @@ public class EventsController : ControllerBase
         return new JsonResult(new { SessionId = Guid.NewGuid() });
     }
 
+    [Authorize(Policy = "User")]
     [HttpPost]
     public async Task<IActionResult> AddEvent([FromBody] Event companyEvent)
     {
@@ -89,6 +96,7 @@ public class EventsController : ControllerBase
         return CreatedAtAction(nameof(GetEventById), new { id = companyEvent.Id }, companyEvent);
     }
 
+    [Authorize(Policy = "User")]
     [HttpPost("{eventId}/{quizIndex}")]
     public async Task<IActionResult> AddQuestion(string eventId, int quizIndex, [FromBody] Question questions)
     {
@@ -135,6 +143,7 @@ public class EventsController : ControllerBase
         }
     }
 
+    [Authorize(Policy = "User")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEvent(string id, [FromBody] Event companyEvent)
     {
@@ -152,6 +161,7 @@ public class EventsController : ControllerBase
         }
     }
 
+    [Authorize(Policy = "User")]
     [HttpPatch("{eventId}/{quizIndex}/{questionIndex}")]
     public async Task<IActionResult> EditQuestion(string eventId, int quizIndex, int questionIndex, [FromBody] Question updatedQuestion)
     {
@@ -167,6 +177,7 @@ public class EventsController : ControllerBase
         }
     }
 
+    [Authorize(Policy = "User")]
     [HttpDelete("company/{companyId}")]
     public async Task<IActionResult> DeleteAllCompanyEvents(string companyId)
     {
@@ -197,6 +208,7 @@ public class EventsController : ControllerBase
         }
     }
 
+    [Authorize(Policy = "User")]
     [HttpDelete("{eventId}/{quizIndex}/{questionIndex}")]
     public async Task<IActionResult> DeleteQuestion(string eventId, int quizIndex, int questionIndex)
     {

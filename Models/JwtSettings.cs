@@ -45,6 +45,34 @@ public class JwtSettings
         return serializedToken;
     }
 
+    public string GenerateGuestJwt()
+    {
+        var secretKey = Key;
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var claims = new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.Role, "Guest")
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: Issuer,
+            audience: Audience,
+            claims: claims,
+            expires: DateTime.Now.AddHours(8),
+            signingCredentials: credentials
+        );
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        var serializedToken = tokenHandler.WriteToken(token);
+        return serializedToken;
+    }
+
     public string? GetClaim(string token, string claim)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

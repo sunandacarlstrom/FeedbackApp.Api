@@ -26,6 +26,20 @@ public class AuthController : ControllerBase
         _signInManager = signInManager;
     }
 
+    [Authorize]
+    [HttpGet("guest")]
+    public IActionResult LoginAsGuest()
+    {
+        string serializedToken = _jwtSettings.GenerateGuestJwt();
+
+        if (serializedToken == null)
+        {
+            return BadRequest("Error");
+        }
+
+        return Ok(new { Token = serializedToken });
+    }
+
     [Authorize(Policy = "Admin")]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterUserDto registerUser)
@@ -71,7 +85,6 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    // [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login([FromBody] LoginUserDto loginUser)
     {
         if (string.IsNullOrEmpty(loginUser.Email) || string.IsNullOrEmpty(loginUser.Password))
