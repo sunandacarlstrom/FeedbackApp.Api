@@ -27,13 +27,19 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet()]
-    public async Task<List<CompanyRole>> GetUserCompanies()
+    public async Task<IActionResult> GetUserCompanies()
     {
         var token = _userService.GetTokenFromWebBrowser(HttpContext);
+        if (token == null)
+        {
+            return Unauthorized($"Token is not valid: {token}");
+        }
         var user = await _userService.GetUserFromToken(token, _jwtSettings);
 
         if (user == null)
-            return new List<CompanyRole>();
+        {
+            return Unauthorized($"Can't find user with token: {token}");
+        }
 
         var userRoles = await _userService.GetUserRole(user.Id);
         var adminRole = await _userService.GetRoleByName("ADMIN");
@@ -50,12 +56,12 @@ public class CompaniesController : ControllerBase
                 })
                 .ToList();
 
-            return companiesRoles;
+            return Ok(companiesRoles);
         }
 
         if (user.CompanyRoles == null)
-            return new List<CompanyRole>();
+            return Ok(new List<CompanyRole>());
 
-        return user.CompanyRoles;
+        return Ok(user.CompanyRoles);
     }
 }

@@ -40,6 +40,19 @@ public class AuthController : ControllerBase
         return Ok(new { Token = serializedToken });
     }
 
+    [HttpPost]
+    public async Task<IActionResult> GetAuth([FromBody] AuthRequest request)
+    {
+        var user = await _userService.GetUserFromToken(request.Token, _jwtSettings);
+
+        if (user == null)
+        {
+            return Ok(new { isUser = false });
+        }
+
+        return Ok(new { isUser = true });
+    }
+
     [Authorize(Policy = "Admin")]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterUserDto registerUser)
