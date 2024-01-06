@@ -20,10 +20,10 @@ builder.Services.AddSingleton<EventService>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("NextJSPolicy", builder =>
+    options.AddPolicy("NextJSPolicy", corsBuilder =>
     {
-        builder
-        .WithOrigins("http://localhost:3000")
+        corsBuilder
+        .WithOrigins(builder.Configuration["Urls:HostFrontend"])
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
